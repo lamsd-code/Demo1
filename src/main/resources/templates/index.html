@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+<div align="center">
+    <h1>Products List</h1>
+    <div>
+        <a th:href="@{/showNewProductForm}" sec:authorize="hasAnyAuthority('ADMIN','EDITOR','CREATOR')">Add New Product</a>
+        <span sec:authorize="isAuthenticated()"> | <a th:href="@{/logout}">Logout</a></span>
+    </div>
+    <br/>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Made in</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${listProducts}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.brand}"></td>
+            <td th:text="${product.madein}"></td>
+            <td th:text="${product.price}"></td>
+            <td>
+                <a th:href="@{'/showFormForUpdate/' + ${product.id}}" sec:authorize="hasAnyAuthority('ADMIN','EDITOR')">Edit</a>
+                <span sec:authorize="hasAnyAuthority('ADMIN','EDITOR')"> | </span>
+                <a th:href="@{'/deleteProduct/' + ${product.id}}" sec:authorize="hasAuthority('ADMIN')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
